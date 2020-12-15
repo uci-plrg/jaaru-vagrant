@@ -1,8 +1,9 @@
 # Jaaru on Vagrant (Artifact Evaluation)
 
-We made this artifact as an effort for making Jaaru easy to use. We open-source [Jaaru](https://github.com/uci-plrg/jaaru) to allow other researchers and developers to benefit from it in debugging their persistent memory tools. This artifact enables users to reproduce the bugs that are found by Jaaru in [PMDK](https://github.com/uci-plrg/jaaru-pmdk) and [RECIPE](https://github.com/uci-plrg/nvm-benchmarks/tree/vagrant/RECIPE) as well as performance results to compare Jaaru with Yat, a naive persistent memory model checker.
+This artifact contains a vagrant repository that downloads and compiles the source code for Jaaru, its companion compiler pass, and benchmarks.  The artifact enables users to reproduce the bugs that are found by Jaaru in [PMDK](https://github.com/uci-plrg/jaaru-pmdk) and [RECIPE](https://github.com/uci-plrg/nvm-benchmarks/tree/vagrant/RECIPE) as well as performance results to compare Jaaru with Yat, a naive persistent memory model checker.
 
-Our suggested workflow creates a virtual machine and set up our tool on it. This workflow has 4 primary parts: (1) Creating a virtual machine and installing dependencies needed to reproduce our results (2) Downloading the source code of Jaaru and the benchmarks and building them (3) Providing the parameters corresponding to each bug to reproduce the bugs (4) Running the benchmarks to compare Jaaru with the naive exhaustive approach (i.e., Yat). After the experiment, the corresponding output files are generated for each bug and each performance measurement. 
+
+Our workflow has four primary parts: (1) creating a virtual machine and installing dependencies needed to reproduce our results, (2) downloading the source code of \tool and the benchmarks and building them, (3) providing the parameters corresponding to each bug to reproduce the bugs, and (4) running the benchmarks to compare Jaaru with the naive exhaustive approach (i.e., Yat). After the experiment, the corresponding output files are generated for each bug and each performance measurement.
 
 ## Step-by-step guidance
 
@@ -23,7 +24,7 @@ Our suggested workflow creates a virtual machine and set up our tool on it. This
     $ cd jaaru-vagrant
 ```
 
-4. Use the following command to set up the virtual machine. Than, our tooling system automatically downloads the source code for Jaaru, its LLVM pass, and PMDK and RECIPE. Then, it builds them and sets them up to be used. Finally, it copy and paste the running script in the *home* directory of the virtual machine. Since building LLVM is time consuming, by default, our tooling system uses prebuilt binary files that contains Jaaru LLVM pass. You can change that by setting **USELLVMBIN=false** in [setup.sh script](https://github.com/uci-plrg/jaaru-vagrant/blob/master/data/setup.sh) 
+4. Use the following command to set up the virtual machine. Than, our tooling system automatically downloads the source code for Jaaru, its LLVM pass, and PMDK and RECIPE. Then, it builds them and sets them up to be used. Finally, it copy and paste the running script in the *home* directory of the virtual machine.
 
 ```
     jaaru-vagrant $ vagrant up

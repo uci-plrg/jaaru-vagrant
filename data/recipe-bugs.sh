@@ -27,17 +27,11 @@ sed -i "162 c\#ifdef BUGFIX" src/CCEH_LSB.cpp
 sed -i "165 c\#ifndef MYBUG" src/CCEH_LSB.cpp
 make BUGFLAG=-DMYBUG=1
 timeout 30 ./run.sh ./example 2 1 >> $BUGDIR/CCEH-bug-2.log
-if [ $? -eq 124 ]; then
-    echo "ERROR: The test case terminated by hitting the timeout." >> $BUGDIR/CCEH-bug-2.log
-fi
 sed -i "165 c\#ifdef BUGFIX" src/CCEH_LSB.cpp
 # Third bug in src/CCEH_LSB.cpp line 168
 sed -i "170 c\#ifndef MYBUG" src/CCEH_LSB.cpp
 make BUGFLAG=-DMYBUG=1
 timeout 30 ./run.sh ./example 2 1 >> $BUGDIR/CCEH-bug-3.log
-if [ $? -eq 124 ]; then
-    echo "ERROR: The test case terminated by hitting the timeout." >> $BUGDIR/CCEH-bug-3.log
-fi
 sed -i "170 c\#ifdef BUGFIX" src/CCEH_LSB.cpp
 sed -i '3d' run.sh
 git checkout -- Makefile
@@ -118,9 +112,6 @@ sed -i "177 c\#ifndef BUGFIX" ../example.cpp
 sed -i "457 c\#ifndef MYBUG" ../src/bwtree.h
 make -j
 timeout 30 ./run.sh ./example 8 2 &> $BUGDIR/P-BwTree-Bug-2.log
-if [ $? -eq 124 ]; then
-    echo "ERROR: The test case terminated by hitting the timeout." >> $BUGDIR/P-BwTree-Bug-2.log
-fi
 sed -i "457 c\#ifdef BUGFIX" ../src/bwtree.h
 # 3rd bugs
 sed -i "471 c\#ifndef MYBUG" ../src/bwtree.h
@@ -142,35 +133,38 @@ sed -i '3d' ../run.sh
 sed -i '4d' ../CMakeLists.txt
 cd ../../
 
+
 ############################### Bugs in P-CLHT
 cd P-CLHT
 rm -rf build
 mkdir build
 sed -i '4iset(CMAKE_CXX_FLAGS "-DMYBUG=1")' CMakeLists.txt
-sed -i '3iexport PMCheck="-f11 -s"' run.sh
+sed -i '3iexport PMCheck=""' run.sh
 cd build
-cmake CMAKE_CXX_FLAGS=-DMYBUG=1 -DCMAKE_C_COMPILER=/home/vagrant/pmcheck-vmem/Test/gcc -DCMAKE_CXX_COMPILER=/home/vagrant/pmcheck-vmem/Test/g++ -DCMAKE_C_FLAGS=-fheinous-gnu-extensions ..
+cmake -DCMAKE_C_COMPILER=/home/vagrant/pmcheck-vmem/Test/gcc -DCMAKE_CXX_COMPILER=/home/vagrant/pmcheck-vmem/Test/g++ -DCMAKE_C_FLAGS=-fheinous-gnu-extensions ..
 # 1st Bug: It didn't crash
-sed -i "172 c\#ifndef MYBUG" ../src/clht_lf_res.c
+sed -i "172 c\#ifdef DISABLEFIX" ../src/clht_lf_res.c
 make -j
-timeout 10 ./run.sh ./example 2 2 &> $BUGDIR/P-CLHT-Bug-1.log
-echo "ERROR: State explosion detected in Execution 1. Double over flow detected!" >> $BUGDIR/P-CLHT-Bug-1.log
+timeout 30 ./run.sh ./example 2 2 &> $BUGDIR/P-CLHT-Bug-1.log
 sed -i "172 c\#ifdef BUGFIX" ../src/clht_lf_res.c
 # 2nd bug
-sed -i "224 c\#ifndef MYBUG" ../src/clht_lf_res.c
+sed -i "224 c\#ifdef DISABLEFIX" ../src/clht_lf_res.c
 make -j
-timeout 10 ./run.sh ./example 2 2 &> $BUGDIR/P-CLHT-Bug-2.log
-echo "ERROR: State explosion detected in Execution 1. Double over flow detected!" >> $BUGDIR/P-CLHT-Bug-2.log
+timeout 30 ./run.sh ./example 2 2 &> $BUGDIR/P-CLHT-Bug-2.log
 sed -i "224 c\#ifdef BUGFIX" ../src/clht_lf_res.c
 # 3rd bug
-sed -i "227 c\#ifndef MYBUG" ../src/clht_lf_res.c
+sed -i "227 c\#ifdef DISABLEFIX" ../src/clht_lf_res.c
 make -j
-timeout 10 ./run.sh ./example 2 2 &> $BUGDIR/P-CLHT-Bug-3.log
-echo "ERROR: State explosion detected in Execution 1. Double over flow detected!" >> $BUGDIR/P-CLHT-Bug-3.log
+sed -i '3 c\export PMCheck="-f11"' run.sh
+timeout 30 ./run.sh ./example 2 2 &> $BUGDIR/P-CLHT-Bug-3.log
+if [ $? -eq 124 ]; then
+    echo "ERROR: The test case terminated by hitting the timeout." >> $BUGDIR/P-CLHT-Bug-3.log
+fi
 sed -i "227 c\#ifdef BUGFIX" ../src/clht_lf_res.c
 sed -i '3d' ../run.sh
 sed -i '4d' ../CMakeLists.txt
 cd ../../
+
 
 ############################### Bugs in P-MassTree
 cd P-Masstree

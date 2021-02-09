@@ -19,7 +19,7 @@ Our workflow has four primary parts: (1) creating a virtual machine and installi
 3. Clone this repository into the local machine and go to the *jaaru-vagrant* folder:
 
 ```
-    $ git clone https://github.com/hgorjiara/jaaru-vagrant.git
+    $ git clone https://github.com/uci-plrg/jaaru-vagrant.git
     $ cd jaaru-vagrant
 ```
 
